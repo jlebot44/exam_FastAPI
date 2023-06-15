@@ -12,7 +12,7 @@ credentials = {
 }
 
 
-def authentication(login : str) :
+def authentication(login: str):
     result = False
     user = login.split(':')[0]
     password = login.split(':')[1]
@@ -28,13 +28,9 @@ def authentication(login : str) :
 def get_index(custom_header: Optional[str] = Header(None)):
     if authentication(custom_header):
         return {
-            'auth' : 'ok'
+            'auth': 'ok'
         }
     else:
         return {
-            'auth_error' : 'merci de vous authentifier'
+            'auth_error': 'merci de vous authentifier'
         }
-
-
-
-
