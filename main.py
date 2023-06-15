@@ -19,7 +19,7 @@ def authentication(login: str):
     try:
         if credentials[user] == password:
             result = True
-    except:
+    except Exception:
         pass
     return result
 
