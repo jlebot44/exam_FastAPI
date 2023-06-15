@@ -11,21 +11,22 @@ credentials = {
   "clementine": "mandarine"
 }
 
-def authentication(login : str):
+
+def authentication(login : str) :
     result = False
     user = login.split(':')[0]
     password = login.split(':')[1]
     try:
         if credentials[user] == password:
-            result = True 
+            result = True
     except:
         pass
-    return result 
+    return result
 
 
 @api.get('/')
 def get_index(custom_header: Optional[str] = Header(None)):
-    if authentication(custom_header):     
+    if authentication(custom_header):
         return {
             'auth' : 'ok'
         }
