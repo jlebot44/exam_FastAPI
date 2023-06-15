@@ -17,6 +17,7 @@ jobs:
         run: |
           pip install pytest
           pip install flake8
+          pip install fastapi
 
       - name: Run tests
         run: |
