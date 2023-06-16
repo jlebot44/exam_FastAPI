@@ -212,7 +212,7 @@ def MyCustomNumberExceptionHandler(request: Request,
 
 @api.exception_handler(CustomAuthenticationException)
 def MyCustomAuthenticationExceptionHandler(request: Request,
-                                           exception: CustomAuthenticationException):
+                                exception: CustomAuthenticationException):
     return JSONResponse(
         status_code=421,
         content={
