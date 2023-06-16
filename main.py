@@ -145,18 +145,18 @@ def get_questionary(questionary_type: Questionary,
         subject = questionary_type.subject
         if indice not in nb_questions:
             raise CustomNumberException(
-                name='count error, please choose an number in this list : '\
+                name='count error, please choose an number in this list : '
                      + str(nb_questions),
                 date=str(datetime.datetime.now()))
         elif use not in use_labels:
             raise CustomUseException(
-                name='use error, please choose a subject in this list : '\
+                name='use error, please choose a subject in this list : '
                      + str(use_labels),
                 date=str(datetime.datetime.now()))
         elif subject not in subject_labels:
             raise CustomSubjectException(
-                name='subject error, please choose a subject in this list : '\
-                    + str(subject_labels),
+                name='subject error, please choose a subject in this list : '
+                     + str(subject_labels),
                 date=str(datetime.datetime.now()))
         else:
             questionary = generate_questionary(use, subject, indice)
@@ -169,10 +169,8 @@ def get_questionary(questionary_type: Questionary,
 
 
 @api.exception_handler(CustomUseException)
-def MyExceptionHandler(
-    request: Request,
-    exception: CustomUseException
-    ):
+def MyExceptionHandler(request: Request,
+                       exception: CustomUseException):
     return JSONResponse(
         status_code=418,
         content={
@@ -185,10 +183,8 @@ def MyExceptionHandler(
 
 
 @api.exception_handler(CustomSubjectException)
-def MyExceptionHandler(
-    request: Request,
-    exception: CustomSubjectException
-    ):
+def MyExceptionHandler(request: Request,
+                       exception: CustomSubjectException):
     return JSONResponse(
         status_code=419,
         content={
@@ -201,10 +197,8 @@ def MyExceptionHandler(
 
 
 @api.exception_handler(CustomNumberException)
-def MyExceptionHandler(
-    request: Request,
-    exception: CustomNumberException
-    ):
+def MyExceptionHandler(request: Request,
+                       exception: CustomNumberException):
     return JSONResponse(
         status_code=420,
         content={
@@ -217,10 +211,8 @@ def MyExceptionHandler(
 
 
 @api.exception_handler(CustomAuthenticationException)
-def MyExceptionHandler(
-    request: Request,
-    exception: CustomAuthenticationException
-    ):
+def MyExceptionHandler(request: Request,
+                       exception: CustomAuthenticationException):
     return JSONResponse(
         status_code=421,
         content={
