@@ -49,6 +49,7 @@ class Questionary(BaseModel):
     subject: str
     number: int
 
+
 class Question(BaseModel):
     """A question to add in the database"""
     question: str
@@ -60,7 +61,6 @@ class Question(BaseModel):
     responseC: str
     responseD: Optional[str] = ""
     remark: Optional[str] = ""
-
 
 
 class CustomAuthException(Exception):
@@ -100,6 +100,7 @@ def authentication(login: str):
     except Exception:
         pass
     return result
+
 
 def admin_authentication(login: str):
     result = False
@@ -186,7 +187,7 @@ def get_questionary(questionary_type: Questionary,
         raise CustomAuthException(
             name='Authentication error',
             date=str(datetime.datetime.now()))
-    
+
 
 @api.post('/add_question',
           name='Add question',
@@ -197,15 +198,14 @@ def add_question(question: Question,
     if admin_authentication(Authorization):
         with open(data_file, 'a') as file:
             file.write(question.question + ',' +
-                       question.subject + ',' + 
+                       question.subject + ',' +
                        question.use + ',' +
                        question.correct + ',' +
                        question.responseA + ',' +
                        question.responseB + ',' +
                        question.responseC + ',' +
                        question.responseD + ',' +
-                       question.remark
-            )
+                       question.remark)
             file.write('\n')
             file.close()
         return "question successfully added"
