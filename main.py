@@ -169,8 +169,8 @@ def get_questionary(questionary_type: Questionary,
 
 
 @api.exception_handler(CustomUseException)
-def MyExceptionHandler(request: Request,
-                       exception: CustomUseException):
+def MyCustomUseExceptionHandler(request: Request,
+                                exception: CustomUseException):
     return JSONResponse(
         status_code=418,
         content={
@@ -183,8 +183,8 @@ def MyExceptionHandler(request: Request,
 
 
 @api.exception_handler(CustomSubjectException)
-def MyExceptionHandler(request: Request,
-                       exception: CustomSubjectException):
+def MyCustomSubjectExceptionHandler(request: Request,
+                                    exception: CustomSubjectException):
     return JSONResponse(
         status_code=419,
         content={
@@ -197,8 +197,8 @@ def MyExceptionHandler(request: Request,
 
 
 @api.exception_handler(CustomNumberException)
-def MyExceptionHandler(request: Request,
-                       exception: CustomNumberException):
+def MyCustomNumberExceptionHandler(request: Request,
+                                   exception: CustomNumberException):
     return JSONResponse(
         status_code=420,
         content={
@@ -211,8 +211,8 @@ def MyExceptionHandler(request: Request,
 
 
 @api.exception_handler(CustomAuthenticationException)
-def MyExceptionHandler(request: Request,
-                       exception: CustomAuthenticationException):
+def MyCustomAuthenticationExceptionHandler(request: Request,
+                                           exception: CustomAuthenticationException):
     return JSONResponse(
         status_code=421,
         content={
