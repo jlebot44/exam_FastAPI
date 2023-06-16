@@ -4,9 +4,11 @@ from fastapi.responses import JSONResponse
 import random
 from pydantic import BaseModel
 import datetime
+from typing import Optional
 
 
 df = pd.read_csv('data/questions.csv')
+data_file = "data/questions.csv"
 
 use_labels = df['use'].unique()
 subject_labels = df['subject'].unique()
@@ -25,8 +27,12 @@ credentials = {
   "clementine": "mandarine"
 }
 
+admin_credentials = {
+    "admin": "4dm1N"
+}
+
 responses = {
-    200: {"description": "tout bon"},
+    200: {"description": "Ok"},
     418: {"description": "use exception :\
            choose a subject in this list : " + str(use_labels)},
     419: {"description": "subject exception :\
@@ -42,6 +48,19 @@ class Questionary(BaseModel):
     use: str
     subject: str
     number: int
+
+class Question(BaseModel):
+    """A question to add in the database"""
+    question: str
+    subject: str
+    use: str
+    correct: str
+    responseA: str
+    responseB: str
+    responseC: str
+    responseD: Optional[str] = ""
+    remark: Optional[str] = ""
+
 
 
 class CustomAuthException(Exception):
@@ -77,6 +96,16 @@ def authentication(login: str):
     user, password = login.split(':')
     try:
         if credentials[user] == password:
+            result = True
+    except Exception:
+        pass
+    return result
+
+def admin_authentication(login: str):
+    result = False
+    user, password = login.split(':')
+    try:
+        if admin_credentials[user] == password:
             result = True
     except Exception:
         pass
@@ -119,21 +148,16 @@ def generate_questionary(use: str, subject: str, indice: int):
     return questionnaire
 
 
-@api.get('/', tags=['all'])
-def get_index(Authorization=Header()):
-    """test authentication"""
-    if authentication(Authorization):
-        return {
-            'auth': 'ok'
-        }
-    else:
-        return {
-            'auth_error': 'merci de vous authentifier'
-        }
+@api.get('/',
+         name='check API status',
+         tags=['all'])
+def get_index():
+    """test API state"""
+    return "API is running"
 
 
 @api.get('/questions',
-         name='Nouveau Questionnaire',
+         name='New questionary',
          responses=responses,
          tags=['all'])
 def get_questionary(questionary_type: Questionary,
@@ -161,6 +185,33 @@ def get_questionary(questionary_type: Questionary,
     else:
         raise CustomAuthException(
             name='Authentication error',
+            date=str(datetime.datetime.now()))
+    
+
+@api.post('/add_question',
+          name='Add question',
+          responses=responses,
+          tags=['admin'])
+def add_question(question: Question,
+                 Authorization=Header(description="login:password")):
+    if admin_authentication(Authorization):
+        with open(data_file, 'a') as file:
+            file.write(question.question + ',' +
+                       question.subject + ',' + 
+                       question.use + ',' +
+                       question.correct + ',' +
+                       question.responseA + ',' +
+                       question.responseB + ',' +
+                       question.responseC + ',' +
+                       question.responseD + ',' +
+                       question.remark
+            )
+            file.write('\n')
+            file.close()
+        return "question successfully added"
+    else:
+        raise CustomAuthException(
+            name='Admin Authentication error',
             date=str(datetime.datetime.now()))
 
 
@@ -217,8 +268,8 @@ def MyCustomAuthExceptionHandler(request: Request,
         content={
             'url': str(request.url),
             'name': exception.name,
-            'message': 'Authentication error ! Please, add login:password'
-                       'in the head of yout resuqest',
+            'message': 'Authentication error ! Add login:password'
+                       ' in the head of your request',
             'date': exception.date
         }
     )
