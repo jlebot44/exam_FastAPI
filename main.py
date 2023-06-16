@@ -14,8 +14,7 @@ credentials = {
 
 def authentication(login: str):
     result = False
-    user = login.split(':')[0]
-    password = login.split(':')[1]
+    user, password = login.split(':')
     try:
         if credentials[user] == password:
             result = True
@@ -25,8 +24,8 @@ def authentication(login: str):
 
 
 @api.get('/')
-def get_index(custom_header: Optional[str] = Header(None)):
-    if authentication(custom_header):
+def get_index(Authorization = Header()):
+    if authentication(Authorization):
         return {
             'auth': 'ok'
         }
