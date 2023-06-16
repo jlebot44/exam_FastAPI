@@ -173,7 +173,7 @@ def MyCustomUseExceptionHandler(request: Request,
             'url': str(request.url),
             'name': exception.name,
             'message': 'use error, please choose a subject in this list : '
-                        + str(use_labels),
+                       + str(use_labels),
             'date': exception.date
         }
     )
@@ -188,7 +188,7 @@ def MyCustomSubjectExceptionHandler(request: Request,
             'url': str(request.url),
             'name': exception.name,
             'message': 'subject error, please choose a subject in this list : '
-                        + str(subject_labels),
+                       + str(subject_labels),
             'date': exception.date
         }
     )
@@ -203,7 +203,7 @@ def MyCustomNumberExceptionHandler(request: Request,
             'url': str(request.url),
             'name': exception.name,
             'message': 'count error, please choose an number in this list : '
-                        + str(nb_questions),
+                       + str(nb_questions),
             'date': exception.date
         }
     )
