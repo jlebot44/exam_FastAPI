@@ -183,7 +183,7 @@ def MyCustomUseExceptionHandler(request: Request,
 
 
 @api.exception_handler(CustomSubjectException)
-def MyCustomSubjectExceptionHandler(request: Request,
+def MyCustomSubjectExceptionHandler(request: Request, \
                                     exception: CustomSubjectException):
     return JSONResponse(
         status_code=419,
