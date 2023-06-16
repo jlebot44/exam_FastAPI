@@ -132,7 +132,10 @@ def get_index(Authorization=Header()):
         }
 
 
-@api.get('/questions', name='Nouveau Questionnaire', responses=responses, tags=['all'])
+@api.get('/questions',
+         name='Nouveau Questionnaire',
+         responses=responses,
+         tags=['all'])
 def get_questionary(questionary_type: Questionary,
                     Authorization=Header(description="login:password")):
     """Returns a questionary with a list of questions"""
@@ -142,22 +145,26 @@ def get_questionary(questionary_type: Questionary,
         subject = questionary_type.subject
         if indice not in nb_questions:
             raise CustomNumberException(
-                name='count error, please choose an number in this list : '+ str(nb_questions),
+                name='count error, please choose an number in this list : '\
+                     + str(nb_questions),
                 date=str(datetime.datetime.now()))
         elif use not in use_labels:
             raise CustomUseException(
-                name='use error, please choose a subject in this list : ' + str(use_labels),
+                name='use error, please choose a subject in this list : '\
+                     + str(use_labels),
                 date=str(datetime.datetime.now()))
         elif subject not in subject_labels:
             raise CustomSubjectException(
-                name='subject error, please choose a subject in this list : ' + str(subject_labels),
+                name='subject error, please choose a subject in this list : '\
+                    + str(subject_labels),
                 date=str(datetime.datetime.now()))
         else:
             questionary = generate_questionary(use, subject, indice)
             return questionary
     else:
         raise CustomAuthenticationException(
-            name='Authentication error ! Please, add your login:password in the head of yout resuqest',
+            name='Authentication error ! Please, add your login:password\
+                  in the head of yout resuqest',
             date=str(datetime.datetime.now()))
 
 
