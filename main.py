@@ -1,5 +1,5 @@
 import pandas as pd
-from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi import FastAPI, Header, Request
 from fastapi.responses import JSONResponse
 import random
 from pydantic import BaseModel
@@ -10,7 +10,7 @@ df = pd.read_csv('data/questions.csv')
 
 use_labels = df['use'].unique()
 subject_labels = df['subject'].unique()
-nb_questions = [5,10,20]
+nb_questions = [5, 10, 20]
 
 api = FastAPI(
     title="Questionnaire technique",
@@ -25,9 +25,6 @@ credentials = {
   "clementine": "mandarine"
 }
 
-
-
-
 responses = {
     200: {"description": "tout bon"},
     418: {"description": "use exception : choose a subject in this list : " + str(use_labels)},
@@ -35,8 +32,6 @@ responses = {
     420: {"description": "number exception :  choose an number in this list : "+ str(nb_questions)},
     421: {"description": "authentication exception"}         
 }
-
-
 
 
 class Questionary(BaseModel):
@@ -68,7 +63,6 @@ class CustomNumberException(Exception):
     def __init__(self, name: str,date: str):        
         self.name = name
         self.date = date
-
 
 
 def authentication(login: str):
@@ -161,6 +155,7 @@ def get_questionary(questionary_type: Questionary,
             name='Authentication error ! Please, add your login:password in the head of yout resuqest',
             date=str(datetime.datetime.now()))
 
+
 @api.exception_handler(CustomUseException)
 def MyExceptionHandler(
     request: Request,
@@ -175,6 +170,7 @@ def MyExceptionHandler(
             'date': exception.date
         }
     )
+
 
 @api.exception_handler(CustomSubjectException)
 def MyExceptionHandler(
@@ -191,6 +187,7 @@ def MyExceptionHandler(
         }
     )
 
+
 @api.exception_handler(CustomNumberException)
 def MyExceptionHandler(
     request: Request,
@@ -205,6 +202,7 @@ def MyExceptionHandler(
             'date': exception.date
         }
     )
+
 
 @api.exception_handler(CustomAuthenticationException)
 def MyExceptionHandler(
