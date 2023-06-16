@@ -27,10 +27,13 @@ credentials = {
 
 responses = {
     200: {"description": "tout bon"},
-    418: {"description": "use exception : choose a subject in this list : " + str(use_labels)},
-    419: {"description": "subject exception : choose a subject in this list : "+ str(subject_labels)},
-    420: {"description": "number exception :  choose an number in this list : "+ str(nb_questions)},
-    421: {"description": "authentication exception"}         
+    418: {"description": "use exception :\
+           choose a subject in this list : " + str(use_labels)},
+    419: {"description": "subject exception :\
+           choose a subject in this list : " + str(subject_labels)},
+    420: {"description": "number exception :\
+            choose an number in this list : " + str(nb_questions)},
+    421: {"description": "authentication exception"}
 }
 
 
@@ -40,27 +43,31 @@ class Questionary(BaseModel):
     subject: str
     number: int
 
+
 class CustomAuthenticationException(Exception):
     """A custom class for Exception description"""
-    def __init__(self, name: str,date: str):        
+    def __init__(self, name: str, date: str):
         self.name = name
         self.date = date
+
 
 class CustomUseException(Exception):
     """A custom class for Exception description"""
-    def __init__(self, name: str,date: str):        
+    def __init__(self, name: str, date: str):
         self.name = name
         self.date = date
+
 
 class CustomSubjectException(Exception):
     """A custom class for Exception description"""
-    def __init__(self, name: str,date: str):        
+    def __init__(self, name: str, date: str):
         self.name = name
         self.date = date
 
+
 class CustomNumberException(Exception):
     """A custom class for Exception description"""
-    def __init__(self, name: str,date: str):        
+    def __init__(self, name: str, date: str):
         self.name = name
         self.date = date
 
@@ -148,8 +155,6 @@ def get_questionary(questionary_type: Questionary,
         else:
             questionary = generate_questionary(use, subject, indice)
             return questionary
-
-            
     else:
         raise CustomAuthenticationException(
             name='Authentication error ! Please, add your login:password in the head of yout resuqest',
