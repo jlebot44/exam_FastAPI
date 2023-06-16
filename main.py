@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi import Header
-from typing import Optional
+
 
 api = FastAPI()
 
@@ -24,7 +24,7 @@ def authentication(login: str):
 
 
 @api.get('/')
-def get_index(Authorization = Header()):
+def get_index(Authorization=Header()):
     if authentication(Authorization):
         return {
             'auth': 'ok'
