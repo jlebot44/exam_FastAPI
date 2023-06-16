@@ -44,7 +44,7 @@ class Questionary(BaseModel):
     number: int
 
 
-class CustomAuthenticationException(Exception):
+class CustomAuthException(Exception):
     """A custom class for Exception description"""
     def __init__(self, name: str, date: str):
         self.name = name
@@ -162,7 +162,7 @@ def get_questionary(questionary_type: Questionary,
             questionary = generate_questionary(use, subject, indice)
             return questionary
     else:
-        raise CustomAuthenticationException(
+        raise CustomAuthException(
             name='Authentication error ! Please, add your login:password\
                   in the head of yout resuqest',
             date=str(datetime.datetime.now()))
@@ -210,9 +210,9 @@ def MyCustomNumberExceptionHandler(request: Request,
     )
 
 
-@api.exception_handler(CustomAuthenticationException)
-def MyCustomAuthenticationExceptionHandler(request: Request,\
-                                           exception: CustomAuthenticationException):
+@api.exception_handler(CustomAuthException)
+def MyCustomAuthExceptionHandler(request: Request,
+                                 exception: CustomAuthException):
     return JSONResponse(
         status_code=421,
         content={
