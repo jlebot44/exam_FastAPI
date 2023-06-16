@@ -145,26 +145,22 @@ def get_questionary(questionary_type: Questionary,
         subject = questionary_type.subject
         if indice not in nb_questions:
             raise CustomNumberException(
-                name='count error, please choose an number in this list : '
-                     + str(nb_questions),
+                name='count error',
                 date=str(datetime.datetime.now()))
         elif use not in use_labels:
             raise CustomUseException(
-                name='use error, please choose a subject in this list : '
-                     + str(use_labels),
+                name='use error',
                 date=str(datetime.datetime.now()))
         elif subject not in subject_labels:
             raise CustomSubjectException(
-                name='subject error, please choose a subject in this list : '
-                     + str(subject_labels),
+                name='subject error',
                 date=str(datetime.datetime.now()))
         else:
             questionary = generate_questionary(use, subject, indice)
             return questionary
     else:
         raise CustomAuthException(
-            name='Authentication error ! Please, add your login:password\
-                  in the head of yout resuqest',
+            name='Authentication error',
             date=str(datetime.datetime.now()))
 
 
@@ -176,7 +172,8 @@ def MyCustomUseExceptionHandler(request: Request,
         content={
             'url': str(request.url),
             'name': exception.name,
-            'message': 'This error is my own',
+            'message': 'use error, please choose a subject in this list : '
+                     + str(use_labels),
             'date': exception.date
         }
     )
@@ -190,7 +187,8 @@ def MyCustomSubjectExceptionHandler(request: Request,
         content={
             'url': str(request.url),
             'name': exception.name,
-            'message': 'This error is my own',
+            'message': 'subject error, please choose a subject in this list : '
+                     + str(subject_labels),
             'date': exception.date
         }
     )
@@ -204,7 +202,8 @@ def MyCustomNumberExceptionHandler(request: Request,
         content={
             'url': str(request.url),
             'name': exception.name,
-            'message': 'This error is my own',
+            'message': 'count error, please choose an number in this list : '
+                     + str(nb_questions),
             'date': exception.date
         }
     )
@@ -218,7 +217,8 @@ def MyCustomAuthExceptionHandler(request: Request,
         content={
             'url': str(request.url),
             'name': exception.name,
-            'message': 'This error is my own',
+            'message': 'Authentication error ! Please, add your login:password' \
+                  'in the head of yout resuqest',
             'date': exception.date
         }
     )
