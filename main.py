@@ -63,6 +63,7 @@ class Question(BaseModel):
     responseD: Optional[str] = ""
     remark: Optional[str] = ""
 
+
 class CustomException(Exception):
     """A custom class for Exception description"""
     def __init__(self, name: str, date: str, code: int, message: str):
@@ -155,21 +156,21 @@ def get_questionary(questionary_type: Questionary,
                 date=str(datetime.datetime.now()),
                 code=420,
                 message='count error, please choose an number in this list : '
-                       + str(nb_questions))
+                        + str(nb_questions))
         elif use not in use_labels:
             raise CustomException(
                 name='use error',
                 date=str(datetime.datetime.now()),
-                code = 418,
+                code=418,
                 message='use error, please choose a subject in this list : '
-                       + str(use_labels))
+                        + str(use_labels))
         elif subject not in subject_labels:
             raise CustomException(
                 name='subject error',
                 date=str(datetime.datetime.now()),
                 code=419,
                 message='subject error, please choose a subject in this list : '
-                       + str(subject_labels))
+                        + str(subject_labels))
         else:
             questionary = generate_questionary(use, subject, indice)
             return questionary
@@ -177,9 +178,9 @@ def get_questionary(questionary_type: Questionary,
         raise CustomException(
             name='Authentication error',
             date=str(datetime.datetime.now()),
-            code = 421,
+            code=421,
             message='Authentication error ! Add login:password'
-                       ' in the head of your request')
+                    ' in the head of your request')
 
 
 @api.post('/add_question',
@@ -206,7 +207,7 @@ def add_question(question: Question,
         raise CustomException(
             name='Admin Authentication error',
             date=str(datetime.datetime.now()),
-            code = 422,
+            code=422,
             message='Admin Authentication error ! Add login:password'
                        ' in the head of your request')
 
