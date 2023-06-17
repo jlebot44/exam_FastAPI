@@ -155,21 +155,21 @@ def get_questionary(questionary_type: Questionary,
                 name='count error',
                 date=str(datetime.datetime.now()),
                 code=420,
-                message='count error, please choose an number in this list : '
+                message='count error, choose an number in this list : '
                         + str(nb_questions))
         elif use not in use_labels:
             raise CustomException(
                 name='use error',
                 date=str(datetime.datetime.now()),
                 code=418,
-                message='use error, please choose a subject in this list : '
+                message='use error, choose a subject in this list : '
                         + str(use_labels))
         elif subject not in subject_labels:
             raise CustomException(
                 name='subject error',
                 date=str(datetime.datetime.now()),
                 code=419,
-                message='subject error, please choose a subject in this list : '
+                message='subject error, choose a subject in this list : '
                         + str(subject_labels))
         else:
             questionary = generate_questionary(use, subject, indice)
@@ -209,7 +209,7 @@ def add_question(question: Question,
             date=str(datetime.datetime.now()),
             code=422,
             message='Admin Authentication error ! Add login:password'
-                       ' in the head of your request')
+                    ' in the head of your request')
 
 
 @api.exception_handler(CustomException)
