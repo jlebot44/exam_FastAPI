@@ -33,13 +33,14 @@ admin_credentials = {
 
 responses = {
     200: {"description": "Ok"},
-    418: {"description": "use exception :\
+    418: {"description": "Use exception :\
            choose a subject in this list : " + str(use_labels)},
-    419: {"description": "subject exception :\
+    419: {"description": "Subject exception :\
            choose a subject in this list : " + str(subject_labels)},
-    420: {"description": "number exception :\
+    420: {"description": "Number exception :\
             choose an number in this list : " + str(nb_questions)},
-    421: {"description": "authentication exception"}
+    421: {"description": "Authentication exception"},
+    422: {"description": "Admin authentication exception"}
 }
 
 
@@ -62,33 +63,13 @@ class Question(BaseModel):
     responseD: Optional[str] = ""
     remark: Optional[str] = ""
 
-
-class CustomAuthException(Exception):
+class CustomException(Exception):
     """A custom class for Exception description"""
-    def __init__(self, name: str, date: str):
+    def __init__(self, name: str, date: str, code: int, message: str):
         self.name = name
         self.date = date
-
-
-class CustomUseException(Exception):
-    """A custom class for Exception description"""
-    def __init__(self, name: str, date: str):
-        self.name = name
-        self.date = date
-
-
-class CustomSubjectException(Exception):
-    """A custom class for Exception description"""
-    def __init__(self, name: str, date: str):
-        self.name = name
-        self.date = date
-
-
-class CustomNumberException(Exception):
-    """A custom class for Exception description"""
-    def __init__(self, name: str, date: str):
-        self.name = name
-        self.date = date
+        self.code = code
+        self.message = message
 
 
 def authentication(login: str):
@@ -169,24 +150,36 @@ def get_questionary(questionary_type: Questionary,
         use = questionary_type.use
         subject = questionary_type.subject
         if indice not in nb_questions:
-            raise CustomNumberException(
+            raise CustomException(
                 name='count error',
-                date=str(datetime.datetime.now()))
+                date=str(datetime.datetime.now()),
+                code=420,
+                message='count error, please choose an number in this list : '
+                       + str(nb_questions))
         elif use not in use_labels:
-            raise CustomUseException(
+            raise CustomException(
                 name='use error',
-                date=str(datetime.datetime.now()))
+                date=str(datetime.datetime.now()),
+                code = 418,
+                message='use error, please choose a subject in this list : '
+                       + str(use_labels))
         elif subject not in subject_labels:
-            raise CustomSubjectException(
+            raise CustomException(
                 name='subject error',
-                date=str(datetime.datetime.now()))
+                date=str(datetime.datetime.now()),
+                code=419,
+                message='subject error, please choose a subject in this list : '
+                       + str(subject_labels))
         else:
             questionary = generate_questionary(use, subject, indice)
             return questionary
     else:
-        raise CustomAuthException(
+        raise CustomException(
             name='Authentication error',
-            date=str(datetime.datetime.now()))
+            date=str(datetime.datetime.now()),
+            code = 421,
+            message='Authentication error ! Add login:password'
+                       ' in the head of your request')
 
 
 @api.post('/add_question',
@@ -210,66 +203,23 @@ def add_question(question: Question,
             file.close()
         return "question successfully added"
     else:
-        raise CustomAuthException(
+        raise CustomException(
             name='Admin Authentication error',
-            date=str(datetime.datetime.now()))
+            date=str(datetime.datetime.now()),
+            code = 422,
+            message='Admin Authentication error ! Add login:password'
+                       ' in the head of your request')
 
 
-@api.exception_handler(CustomUseException)
+@api.exception_handler(CustomException)
 def MyCustomUseExceptionHandler(request: Request,
-                                exception: CustomUseException):
+                                exception: CustomException):
     return JSONResponse(
-        status_code=418,
+        status_code=exception.code,
         content={
             'url': str(request.url),
             'name': exception.name,
-            'message': 'use error, please choose a subject in this list : '
-                       + str(use_labels),
-            'date': exception.date
-        }
-    )
-
-
-@api.exception_handler(CustomSubjectException)
-def MyCustomSubjectExceptionHandler(request: Request,
-                                    exception: CustomSubjectException):
-    return JSONResponse(
-        status_code=419,
-        content={
-            'url': str(request.url),
-            'name': exception.name,
-            'message': 'subject error, please choose a subject in this list : '
-                       + str(subject_labels),
-            'date': exception.date
-        }
-    )
-
-
-@api.exception_handler(CustomNumberException)
-def MyCustomNumberExceptionHandler(request: Request,
-                                   exception: CustomNumberException):
-    return JSONResponse(
-        status_code=420,
-        content={
-            'url': str(request.url),
-            'name': exception.name,
-            'message': 'count error, please choose an number in this list : '
-                       + str(nb_questions),
-            'date': exception.date
-        }
-    )
-
-
-@api.exception_handler(CustomAuthException)
-def MyCustomAuthExceptionHandler(request: Request,
-                                 exception: CustomAuthException):
-    return JSONResponse(
-        status_code=421,
-        content={
-            'url': str(request.url),
-            'name': exception.name,
-            'message': 'Authentication error ! Add login:password'
-                       ' in the head of your request',
+            'message': exception.message,
             'date': exception.date
         }
     )
