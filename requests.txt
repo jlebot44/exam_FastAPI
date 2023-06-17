@@ -1,0 +1,81 @@
+Check api status
+curl --location 'http://127.0.0.1:8000/' 
+
+
+ask for 5 questions, use = BDD, subject = Test de positionnement
+curl --location --request GET 'http://127.0.0.1:8000/questions' \
+--header 'Authorization: bob:builder' \
+--header 'Content-Type: application/json' \
+--data '{"use": "Test de positionnement",
+"subject": "BDD",
+"number": 5}'
+
+
+check authentication error (421)
+curl --location --request GET 'http://127.0.0.1:8000/questions' \
+--header 'Authorization: bob:builde' \
+--header 'Content-Type: application/json' \
+--data '{"use": "Test de positionnement",
+"subject": "BDD",
+"number": 5}'
+
+
+check error nb questions (420) : ask for 4 questions, use = BDD, subject = Test de positionnement
+curl --location --request GET 'http://127.0.0.1:8000/questions' \
+--header 'Authorization: bob:builder' \
+--header 'Content-Type: application/json' \
+--data '{"use": "Test de positionnement",
+"subject": "BDD",
+"number": 4}'
+
+
+check subject error(419) : ask for 5 questions, use = BD, subject = Test de positionnement
+curl --location --request GET 'http://127.0.0.1:8000/questions' \
+--header 'Authorization: bob:builder' \
+--header 'Content-Type: application/json' \
+--data '{"use": "Test de positionnement",
+"subject": "BD",
+"number": }'
+
+
+check use error (418) : ask for 5 questions, use = BDD, subject = Tet de positionnement
+curl --location --request GET 'http://127.0.0.1:8000/questions' \
+--header 'Authorization: bob:builder' \
+--header 'Content-Type: application/json' \
+--data '{"use": "Tet de positionnement",
+"subject": "BDD",
+"number": }'
+
+
+Add a question:
+curl --location 'http://127.0.0.1:8000/add_question' \
+--header 'Authorization: admin:4dm1N' \
+--header 'Content-Type: application/json' \
+--data '{
+    "question": "la question",
+    "subject": "le sujet",
+    "use": "le use",
+    "correct": "la reponse",
+    "responseA": "la réponse A",
+    "responseB": "la réponse B",
+    "responseC": "la réponse C",
+    "responseD": "la réponse D",
+    "remark": "la remarque"
+}'
+
+
+check admin authentication error (422):
+curl --location 'http://127.0.0.1:8000/add_question' \
+--header 'Authorization: admin:4dm1' \
+--header 'Content-Type: application/json' \
+--data '{
+    "question": "la question",
+    "subject": "le sujet",
+    "use": "le use",
+    "correct": "la reponse",
+    "responseA": "la réponse A",
+    "responseB": "la réponse B",
+    "responseC": "la réponse C",
+    "responseD": "la réponse D",
+    "remark": "la remarque"
+}'
